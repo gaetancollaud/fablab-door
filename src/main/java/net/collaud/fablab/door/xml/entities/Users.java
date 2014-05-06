@@ -1,4 +1,4 @@
-package net.collaud.fablab.raspberry.xml.entities;
+package net.collaud.fablab.door.xml.entities;
 
 import java.util.ArrayList;
 import java.util.List;

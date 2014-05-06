@@ -1,4 +1,4 @@
-package net.collaud.fablab.raspberry.xml;
+package net.collaud.fablab.door.xml;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -6,8 +6,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import net.collaud.fablab.raspberry.Constants;
-import net.collaud.fablab.raspberry.xml.entities.Users;
+import net.collaud.fablab.door.Constants;
+import net.collaud.fablab.door.xml.entities.Users;
 import org.apache.log4j.Logger;
 
 /**

@@ -1,7 +1,7 @@
-package net.collaud.fablab.raspberry.io;
+package net.collaud.fablab.door.io;
 
 import java.net.Inet4Address;
-import net.collaud.fablab.raspberry.Constants;
+import net.collaud.fablab.door.Constants;
 
 /**
  *

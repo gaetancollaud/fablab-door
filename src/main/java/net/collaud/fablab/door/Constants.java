@@ -1,4 +1,4 @@
-package net.collaud.fablab.raspberry;
+package net.collaud.fablab.door;
 
 /**
  *

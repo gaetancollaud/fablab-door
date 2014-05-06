@@ -1,4 +1,4 @@
-package net.collaud.fablab.raspberry.serial;
+package net.collaud.fablab.door.serial;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

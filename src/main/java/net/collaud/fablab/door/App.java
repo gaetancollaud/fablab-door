@@ -1,17 +1,17 @@
-package net.collaud.fablab.raspberry;
+package net.collaud.fablab.door;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
-import net.collaud.fablab.raspberry.io.IOManagerFactory;
-import net.collaud.fablab.raspberry.io.RelayManager;
-import net.collaud.fablab.raspberry.serial.SerialInterface;
-import net.collaud.fablab.raspberry.serial.SerialInterfaceFactory;
-import net.collaud.fablab.raspberry.xml.XmlParser;
-import net.collaud.fablab.raspberry.xml.entities.User;
-import net.collaud.fablab.raspberry.xml.entities.Users;
+import net.collaud.fablab.door.io.IOManagerFactory;
+import net.collaud.fablab.door.io.RelayManager;
+import net.collaud.fablab.door.serial.SerialInterface;
+import net.collaud.fablab.door.serial.SerialInterfaceFactory;
+import net.collaud.fablab.door.xml.XmlParser;
+import net.collaud.fablab.door.xml.entities.User;
+import net.collaud.fablab.door.xml.entities.Users;
 import org.apache.log4j.Logger;
 
 public class App implements Observer {
