@@ -9,11 +9,11 @@
 
 	<name>fablab-door</name>
 	<url>http://maven.apache.org</url>
-    <ciManagement>
-        <system>hudson</system>
-        <url>http://vps51759.ovh.net:8080/job/fablab%20raspberry%20pi/</url>
-    </ciManagement>
-    <properties>
+	<ciManagement>
+		<system>hudson</system>
+		<url>http://collaud2.collaud.me:8080/job/fablab-door/</url>
+	</ciManagement>
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
@@ -115,15 +115,15 @@
 					</webResources>
 				</configuration>
 			</plugin>
-		 <plugin>
-		  <groupId>org.apache.maven.plugins</groupId>
-		  <artifactId>maven-compiler-plugin</artifactId>
-		  <version>2.3.2</version>
-		  <configuration>
-		   <source>1.7</source>
-		   <target>1.7</target>
-		  </configuration>
-		 </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
 		</plugins>
 		<extensions>
 			<extension>
@@ -149,7 +149,8 @@
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
-			<version>2.0-m01</version>
+			<version>2.0</version>
+			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
@@ -165,6 +166,11 @@
 			<groupId>org.rxtx</groupId>
 			<artifactId>rxtx</artifactId>
 			<version>2.1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>net.collaud.fablab</groupId>
+			<artifactId>fablab-webservice</artifactId>
+			<version>1.0</version>
 		</dependency>
 	</dependencies>
 </project>
