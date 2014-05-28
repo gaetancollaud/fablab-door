@@ -9,19 +9,18 @@
 
 	<name>fablab-door</name>
 	<url>http://maven.apache.org</url>
-    <ciManagement>
-        <system>hudson</system>
-        <url>http://vps51759.ovh.net:8080/job/fablab%20raspberry%20pi/</url>
-    </ciManagement>
-    <properties>
+	<ciManagement>
+		<system>hudson</system>
+		<url>http://vps51759.ovh.net:8080/job/fablab%20raspberry%20pi/</url>
+	</ciManagement>
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
-	
 	<distributionManagement>
 		<repository>
-			<id>ftp-repository-fablab</id>
-			<url>ftp://192.168.170.50</url>
+			<id>fablab-door</id>
+			<url>scpexe://192.168.2.210</url>
 		</repository>
 	</distributionManagement>
   
@@ -54,7 +53,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>net.collaud.fablab.raspberry.App</mainClass>
+							<mainClass>net.collaud.fablab.door.</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -115,20 +114,25 @@
 					</webResources>
 				</configuration>
 			</plugin>
-		 <plugin>
-		  <groupId>org.apache.maven.plugins</groupId>
-		  <artifactId>maven-compiler-plugin</artifactId>
-		  <version>2.3.2</version>
-		  <configuration>
-		   <source>1.7</source>
-		   <target>1.7</target>
-		  </configuration>
-		 </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
 		</plugins>
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ftp</artifactId>
+				<version>1.0-beta-6</version>
+			</extension>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh-external</artifactId>
 				<version>1.0-beta-6</version>
 			</extension>
 		</extensions>
