@@ -13,7 +13,7 @@ public class WebServiceServer {
 		server.setPort(8083);
 		server.setName("Rest service");
 		
-		server.uri("/"+WebServicePath.PING_URL, new WSPingController());
+		server.uri("/"+WebServicePath.BASE_URL+"/"+WebServicePath.PING_URL, new WSPingController());
 		
 		server.bind();
 		server.awaitShutdown();
