@@ -1,0 +1,24 @@
+
+# a2enmod proy
+# a2enmod proxy_http
+# a2enmod ssl
+# https://www.digitalocean.com/community/articles/how-to-create-a-ssl-certificate-on-apache-for-ubuntu-12-04
+
+<VirtualHost *:443>
+    ServerName raspdoor.fablab.local
+
+    <Proxy *>
+        Order deny,allow
+        Allow from all
+    </Proxy>
+
+    SSLEngine on
+    SSLProxyEngine On
+    SSLCertificateFile /etc/apache2/ssl/apache.crt
+    SSLCertificateKeyFile /etc/apache2/ssl/apache.key
+
+    ProxyRequests Off
+    ProxyPreserveHost On
+    ProxyPass / http://localhost:8083/
+    ProxyPassReverse / http://localhost:8083/
+</VirtualHost>
