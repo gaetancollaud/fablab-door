@@ -32,6 +32,7 @@ public class WebServiceServer {
 	private WebServiceServer() {
 		server = new RestExpress();
 		server.setPort(Constants.WEBSERVICE_PORT);
+		
 		registerUrl("/" + WebServicePath.BASE_URL + "/" + WebServicePath.PING_URL, new PingController());
 		registerUrl("/" + WebServicePath.BASE_URL + "/" + WebServicePath.DOOR_URL, new DoorController());
 		
