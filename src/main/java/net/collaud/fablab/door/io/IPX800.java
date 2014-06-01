@@ -3,11 +3,7 @@ package net.collaud.fablab.door.io;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -31,13 +27,14 @@ public class IPX800 implements RelayManager {
 	}
 
 	private void connect() {
-		try {
-			socket = new Socket(InetAddress.getByName(addr), port);
-			writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		} catch (IOException ex) {
-			LOG.error("Cannot connect to IPX800 at " + addr + ":" + port, ex);
-		}
+			//FIXME remove comments
+//		try {
+//			socket = new Socket(InetAddress.getByName(addr), port);
+//			writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+//			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//		} catch (IOException ex) {
+//			LOG.error("Cannot connect to IPX800 at " + addr + ":" + port, ex);
+//		}
 	}
 
 	@Override
@@ -49,8 +46,8 @@ public class IPX800 implements RelayManager {
 	public void setRelayImpulsion(Relay output, boolean on) {
 		writeCmd("Set", output.getOutputNumber(), on, "p");
 	}
-	
-	protected void writeCmd(String cmd, int port, boolean on){
+
+	protected void writeCmd(String cmd, int port, boolean on) {
 		writeCmd(cmd, port, on, "");
 	}
 
@@ -62,15 +59,20 @@ public class IPX800 implements RelayManager {
 		sb.append(port);
 		sb.append(on ? "1" : "0");
 		sb.append(suffix);
-		try {
-			writer.write(sb.toString());
-			writer.newLine();
-			writer.flush();
-			if(LOG.isDebugEnabled()){
-				LOG.debug("Write cmd "+sb.toString());
+
+		if (writer != null) {
+			try {
+				writer.write(sb.toString());
+				writer.newLine();
+				writer.flush();
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Write cmd " + sb.toString());
+				}
+			} catch (IOException ex) {
+				LOG.error("Cannot write command", ex);
 			}
-		} catch (IOException ex) {
-			LOG.error("Cannot write command", ex);
+		} else {
+			LOG.error("IPX800 not connected, cannot send command : " + sb.toString());
 		}
 	}
 

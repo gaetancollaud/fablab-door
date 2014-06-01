@@ -8,7 +8,6 @@ public interface RelayManager {
 	
 	public enum Relay{
 		RELAY_DOOR(1),
-		OUTPUT_2(2),
 		RELAY_3(3),
 		OUTPUT_4(4),
 		OUTPUT_5(5),

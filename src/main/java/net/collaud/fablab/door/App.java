@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Level;
-import net.collaud.fablab.door.io.IOManagerFactory;
-import net.collaud.fablab.door.io.RelayManager;
+import net.collaud.fablab.door.io.IOManager;
 import net.collaud.fablab.door.serial.SerialInterface;
 import net.collaud.fablab.door.serial.SerialInterfaceFactory;
+import net.collaud.fablab.door.ws.WebServiceServer;
 import net.collaud.fablab.door.xml.XmlParser;
 import net.collaud.fablab.door.xml.entities.User;
 import net.collaud.fablab.door.xml.entities.Users;
@@ -20,13 +19,15 @@ public class App implements Observer {
 
 	private static SerialInterface itf;
 
-	private final RelayManager relayManager;
+	private final IOManager ioManager;
 
 	private final Map<String, User> users;
 
 	public static void main(String[] args) {
+		long time = System.currentTimeMillis();
 		LOG.info("Starting application");
 		App app = new App();
+		LOG.info("Application started in "+(System.currentTimeMillis()-time)+"ms");
 		app.run();
 	}
 
@@ -38,31 +39,23 @@ public class App implements Observer {
 	}
 
 	public App() {
+		WebServiceServer.getInstance(); //start webservice
+		
 		Users usersTmp = XmlParser.readUsers();
 
-		relayManager = IOManagerFactory.getBestRelayManager();
+		ioManager = IOManager.getInstance();
 
 		users = new HashMap<>();
-		for (User u : usersTmp.getListUsers()) {
-			users.put(u.getRfid().toUpperCase(), u);
-		}
+		usersTmp.getListUsers().stream().forEach((u) -> users.put(u.getRfid().toUpperCase(), u));
 
 		LOG.info("Start serial interface");
 		itf = SerialInterfaceFactory.getBestInterface(Constants.RFID_PORT_PREFIX);
 		itf.addObserver(this);
+		
 	}
 
 	public void run() {
-		int v = 1;
 		try {
-//			while (v == 1) {
-//				Thread.sleep(5000);
-//				relayManager.setRelay(RelayManager.Relay.RELAY_DOOR, true);
-//				Thread.sleep(5000);
-//				relayManager.setRelay(RelayManager.Relay.RELAY_DOOR, false);
-//
-//			}
-
 			while (true) {
 				Thread.sleep(10 * 60 * 1000);
 				LOG.info("Still alive");
@@ -80,12 +73,8 @@ public class App implements Observer {
 				LOG.warn("Refused for RFID " + rfid);
 			} else {
 				LOG.info("Granted for user " + u.getName());
-				relayManager.setRelay(RelayManager.Relay.RELAY_DOOR, true);
-				try {
-					Thread.sleep(3000);
-				} catch (InterruptedException ex) {
-				}
-				relayManager.setRelay(RelayManager.Relay.RELAY_DOOR, false);
+				
+				ioManager.openDoorShortly();
 			}
 		} else {
 			LOG.error("Observer received wrong arg : " + arg.toString());

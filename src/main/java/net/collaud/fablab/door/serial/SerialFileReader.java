@@ -26,7 +26,7 @@ public class SerialFileReader extends SerialInterface {
 
 	private boolean connect(int portnumber) {
 		try {
-			in = new BufferedReader(new FileReader(fileNamePrefix));
+			in = new BufferedReader(new FileReader(fileNamePrefix+portnumber));
 			return true;
 		} catch (FileNotFoundException ex) {
 			LOG.error("Cannot connect to port " + portnumber, ex);

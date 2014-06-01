@@ -17,7 +17,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Fablab door service"
 NAME=fablab-door
 DAEMON=/usr/bin/java
-DAEMON_ARGS="-jar /home/gaetan/fablab/fablab-raspberry-1.0-jar-with-dependencies.jar"
+DAEMON_ARGS="-jar /fablab/fablab-door.jar"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 

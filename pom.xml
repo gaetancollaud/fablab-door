@@ -16,14 +16,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
-	<distributionManagement>
-		<repository>
-			<id>fablab-door</id>
-			<url>scpexe://192.168.2.210</url>
-		</repository>
-	</distributionManagement>
-  
 	<build>
 		<plugins>
 			<plugin>
@@ -33,7 +25,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>net.collaud.fablab.door.WebServiceServer</mainClass>
+							<mainClass>net.collaud.fablab.door.App</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -54,7 +46,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>net.collaud.fablab.door.WebServiceServer</mainClass>
+							<mainClass>net.collaud.fablab.door.App</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -62,59 +54,6 @@
 					</descriptorRefs>
 				</configuration>
 				<version>2.4</version>
-			</plugin>
-			<!--<plugin>
-				<groupId>org.jvnet.jax-ws-commons</groupId>
-				<artifactId>jaxws-maven-plugin</artifactId>
-				<version>2.3</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>wsimport</goal>
-						</goals>
-						<configuration>
-							<wsdlFiles>
-								<wsdlFile>172.17.1.239_8080/fablabWeb/RFID.wsdl</wsdlFile>
-							</wsdlFiles>
-							<packageName>net.collaud.fablab.raspberry.ws</packageName>
-							<wsdlLocation>http://172.17.1.239:8080/fablabWeb/RFID?wsdl</wsdlLocation>
-							<staleFile>${project.build.directory}/jaxws/stale/RFID.stale</staleFile>
-						</configuration>
-						<id>wsimport-generate-RFID</id>
-						<phase>generate-sources</phase>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>javax.xml</groupId>
-						<artifactId>webservices-api</artifactId>
-						<version>2.0</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<sourceDestDir>${project.build.directory}/generated-sources/jaxws-wsimport</sourceDestDir>
-					<xnocompile>true</xnocompile>
-					<verbose>true</verbose>
-					<extension>true</extension>
-					<catalog>${basedir}/src/jax-ws-catalog.xml</catalog>
-				</configuration>
-			</plugin>-->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.0.2</version>
-				<configuration>
-					<webResources>
-						<resource>
-							<directory>src</directory>
-							<targetPath>WEB-INF</targetPath>
-							<includes>
-								<include>jax-ws-catalog.xml</include>
-								<include>wsdl/**</include>
-							</includes>
-						</resource>
-					</webResources>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -125,7 +64,7 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			<plugin>
+						<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>wagon-maven-plugin</artifactId>
 				<version>1.0-beta-3</version>
@@ -133,12 +72,12 @@
 					<execution>
 						<id>default-cli</id>
 						<goals>
-							<goal>upload</goal>
+							<goal>upload-single</goal>
 						</goals>
 						<configuration>
-							<fromFile>${project.build.directory}/${project.build.finalName}.war</fromFile>
-							<toFile>/home/pi/fablab-door.jar</toFile>
-							<url>pscp://172.17.10.50</url>
+							<fromFile>${project.build.directory}/${project.build.finalName}-jar-with-dependencies.jar</fromFile>
+							<toFile>/fablab/fablab-door.jar</toFile>
+							<url>scp://172.17.10.50</url>
 							<serverId>fablab-door</serverId>
 						</configuration>
 					</execution>
@@ -149,18 +88,12 @@
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ftp</artifactId>
-				<version>1.0-beta-6</version>
-			</extension>
-			
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ssh-external</artifactId>
-				<version>1.0-beta-6</version>
+				<version>2.6</version>
 			</extension>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ssh-external</artifactId>
-				<version>1.0-beta-6</version>
+				<artifactId>wagon-ssh</artifactId>
+				<version>2.6</version>
 			</extension>
 		</extensions>
 	</build>

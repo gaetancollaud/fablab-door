@@ -10,7 +10,7 @@
 
 	<appender name="fileAppender" class="org.apache.log4j.RollingFileAppender">
 		<param name="append" value="true"/>
-		<param name="file" value="/home/gaetan/fablab.log"/>
+		<param name="file" value="/fablab/fablab.log"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{dd.MM.yyyy HH:mm:ss} %-5p [%c{1}] %m%n"/>
 		</layout>
@@ -21,4 +21,9 @@
 		<appender-ref ref="consoleAppender"/>
 		<appender-ref ref="fileAppender"/>
 	</root>
+	
+    <logger name="net.collaud.fablab.door.ws">
+        <level value="debug"/>
+    </logger>
+	
 </log4j:configuration>

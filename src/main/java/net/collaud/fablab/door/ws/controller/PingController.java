@@ -1,4 +1,4 @@
-package net.collaud.fablab.door;
+package net.collaud.fablab.door.ws.controller;
 
 import net.collaud.fablab.webservice.response.PingResponse;
 import org.restexpress.Request;
@@ -8,7 +8,7 @@ import org.restexpress.Response;
  *
  * @author gaetan
  */
-public class WSPingController {
+public class PingController {
 
 	private static final String STATUS_RESPONSE_HEADER = "http_response_code";
 
