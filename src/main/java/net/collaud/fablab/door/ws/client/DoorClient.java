@@ -4,8 +4,8 @@ import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import net.collaud.fablab.webservice.WebServicePath;
-import net.collaud.fablab.webservice.response.OpenDoorResponse;
+import net.collaud.fablab.common.ws.WebServicePath;
+import net.collaud.fablab.common.ws.response.OpenDoorResponse;
 
 /**
  * Jersey REST client generated for REST resource:DoorResource [door]<br>

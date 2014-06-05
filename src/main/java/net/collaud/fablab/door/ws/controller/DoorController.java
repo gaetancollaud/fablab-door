@@ -1,7 +1,7 @@
 package net.collaud.fablab.door.ws.controller;
 
 import net.collaud.fablab.door.io.IOManager;
-import net.collaud.fablab.webservice.response.DoorStatusResponse;
+import net.collaud.fablab.common.ws.response.DoorStatusResponse;
 import org.apache.log4j.Logger;
 import org.restexpress.Request;
 import org.restexpress.Response;

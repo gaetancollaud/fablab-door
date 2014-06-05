@@ -3,7 +3,7 @@ package net.collaud.fablab.door.ws;
 import net.collaud.fablab.door.Constants;
 import net.collaud.fablab.door.ws.controller.DoorController;
 import net.collaud.fablab.door.ws.controller.PingController;
-import net.collaud.fablab.webservice.WebServicePath;
+import net.collaud.fablab.common.ws.WebServicePath;
 import org.apache.log4j.Logger;
 import org.restexpress.Request;
 import org.restexpress.Response;

@@ -1,6 +1,6 @@
 package net.collaud.fablab.door.ws.controller;
 
-import net.collaud.fablab.webservice.response.PingResponse;
+import net.collaud.fablab.common.ws.response.PingResponse;
 import org.restexpress.Request;
 import org.restexpress.Response;
 

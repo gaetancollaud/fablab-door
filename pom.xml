@@ -101,7 +101,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.collaud.fablab</groupId>
-			<artifactId>fablab-webservice</artifactId>
+			<artifactId>fablab-common</artifactId>
 			<version>1.0</version>
 		</dependency>
 		
