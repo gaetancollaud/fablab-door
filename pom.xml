@@ -64,7 +64,7 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-						<plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>wagon-maven-plugin</artifactId>
 				<version>1.0-beta-3</version>
@@ -106,10 +106,10 @@
 		</dependency>
 		
 		<dependency>
-            <groupId>com.strategicgains</groupId>
-            <artifactId>RestExpress</artifactId>
-            <version>0.10.3</version>
-        </dependency>
+			<groupId>com.strategicgains</groupId>
+			<artifactId>RestExpress</artifactId>
+			<version>0.10.3</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>junit</groupId>
