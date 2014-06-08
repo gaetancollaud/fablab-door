@@ -24,7 +24,9 @@ public class IOManager {
 	public static final int ALARM_ON_OFF_DELAY = 200;//in ms
 	public static final int ALARM_PIN_ON = 0;
 	public static final int ALARM_PIN_OFF = 1;
-	public static final int BUTTON_EXIT = 0;
+	public static final int DOOR_PIN_OPEN = 2;
+	public static final int STATUS_PIN_DOOR = 6;
+	public static final int STATUS_PIN_ALARM = 7;
 
 	private static final Logger LOG = Logger.getLogger(IOManager.class);
 
@@ -57,10 +59,30 @@ public class IOManager {
 		}
 		piface = Optional.ofNullable(pf);
 		timer = new Timer();
+		
+		timer.schedule(new LedStateTask(), 0, 100);
 	}
 
 	private void addButtonListeners(PiFace pf) {
 		pf.getSwitch(PiFaceSwitch.S1).addListener((SwitchListener) (SwitchStateChangeEvent event) -> {
+			if (event.getNewState() == SwitchState.ON) {
+				LOG.info("Button rfid pressed");
+				openDoorShortly();
+			}
+		});
+		pf.getSwitch(PiFaceSwitch.S2).addListener((SwitchListener) (SwitchStateChangeEvent event) -> {
+			if (event.getNewState() == SwitchState.ON) {
+				LOG.info("Button open door pressed");
+				openDoorPermanently();
+			}
+		});
+		pf.getSwitch(PiFaceSwitch.S3).addListener((SwitchListener) (SwitchStateChangeEvent event) -> {
+			if (event.getNewState() == SwitchState.ON) {
+				LOG.info("Button close door pressed");
+				closeDoorPermanenlty();
+			}
+		});
+		pf.getSwitch(PiFaceSwitch.S4).addListener((SwitchListener) (SwitchStateChangeEvent event) -> {
 			if (event.getNewState() == SwitchState.ON) {
 				LOG.info("Button exit pressed");
 				closeDoorAndActivateAlarm();
@@ -125,6 +147,7 @@ public class IOManager {
 	private boolean doorOpen() {
 		if (!doorOpen) {
 			ipx800.setRelay(RelayManager.Relay.RELAY_DOOR, true);
+			piface.ifPresent(pf -> pf.getOutputPin(DOOR_PIN_OPEN).low());
 			doorOpen = true;
 			return true;
 		}
@@ -134,6 +157,7 @@ public class IOManager {
 	private boolean doorClose() {
 		if (doorOpen) {
 			ipx800.setRelay(RelayManager.Relay.RELAY_DOOR, false);
+			piface.ifPresent(pf -> pf.getOutputPin(DOOR_PIN_OPEN).high());
 			doorOpen = false;
 			return true;
 		}
@@ -194,6 +218,32 @@ public class IOManager {
 			} catch (InterruptedException ex) {
 				LOG.warn("OnOffWithDelay interrupted", ex);
 			}
+		}
+
+	}
+
+	protected class LedStateTask extends TimerTask {
+		
+		private boolean lastState = true;
+
+		@Override
+		public void run() {
+			piface.ifPresent(pf -> {
+				if (alarmOn && lastState) {
+					pf.getOutputPin(STATUS_PIN_ALARM).high();
+				} else {
+					pf.getOutputPin(STATUS_PIN_ALARM).low();
+				}
+				
+				
+				
+				if (doorOpen) {
+					pf.getOutputPin(STATUS_PIN_DOOR).low();
+				} else {
+					pf.getOutputPin(STATUS_PIN_DOOR).high();
+				}
+			});
+			lastState = !lastState;
 		}
 
 	}

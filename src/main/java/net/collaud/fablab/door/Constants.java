@@ -12,5 +12,5 @@ public class Constants {
 	public static final String IPX800_ADDR = "192.168.170.4";
 	public static final int IPX800_PORT = 9870;
 	public static final int WEBSERVICE_PORT = 8083;
-	public static final int DOOR_OPEN_SHORTLY_DELAY = 5*1000; //5 sec
+	public static final int DOOR_OPEN_SHORTLY_DELAY = 3*1000; //ms
 }
