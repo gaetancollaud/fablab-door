@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
-import net.collaud.fablab.door.Constants;
+import net.collaud.fablab.common.file.FileHelper;
+import net.collaud.fablab.door.file.ConfigFileHelper;
+import net.collaud.fablab.door.file.FileHelperFactory;
 import org.apache.log4j.Logger;
 
 /**
@@ -49,7 +51,8 @@ public class IOManager {
 	private Optional<TimerTask> currentTask;
 
 	private IOManager() {
-		ipx800 = new IPX800(Constants.IPX800_ADDR, Constants.IPX800_PORT);
+		FileHelper<ConfigFileHelper> config = FileHelperFactory.getConfig();
+		ipx800 = new IPX800(config.get(ConfigFileHelper.IPX800_ADDR), config.getAsInt(ConfigFileHelper.IPX800_PORT));
 		PiFace pf = null;
 		try {
 			pf = new PiFaceDevice(PiFace.DEFAULT_ADDRESS, Spi.CHANNEL_0);
@@ -172,7 +175,7 @@ public class IOManager {
 	private void createOpenDoorShortlyTask() {
 		cancelOpenDoorShortlyTask();
 		currentTask = Optional.of(new OpenDoorShortlyTask());
-		timer.schedule(currentTask.get(), Constants.DOOR_OPEN_SHORTLY_DELAY);
+		timer.schedule(currentTask.get(), FileHelperFactory.getConfig().getAsInt(ConfigFileHelper.OPEN_DOOR_SHORTLY_DELAY));
 
 	}
 

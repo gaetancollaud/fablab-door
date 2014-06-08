@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import net.collaud.fablab.door.file.ConfigFileHelper;
+import net.collaud.fablab.door.file.FileHelperFactory;
 import net.collaud.fablab.door.io.IOManager;
 import net.collaud.fablab.door.serial.SerialInterface;
 import net.collaud.fablab.door.serial.SerialInterfaceFactory;
@@ -27,7 +29,7 @@ public class App implements Observer {
 		long time = System.currentTimeMillis();
 		LOG.info("Starting application");
 		App app = new App();
-		LOG.info("Application started in "+(System.currentTimeMillis()-time)+"ms");
+		LOG.info("Application started in " + (System.currentTimeMillis() - time) + "ms");
 		app.run();
 	}
 
@@ -40,7 +42,7 @@ public class App implements Observer {
 
 	public App() {
 		WebServiceServer.getInstance(); //start webservice
-		
+
 		Users usersTmp = XmlParser.readUsers();
 
 		ioManager = IOManager.getInstance();
@@ -49,9 +51,9 @@ public class App implements Observer {
 		usersTmp.getListUsers().stream().forEach((u) -> users.put(u.getRfid().toUpperCase(), u));
 
 		LOG.info("Start serial interface");
-		itf = SerialInterfaceFactory.getBestInterface(Constants.RFID_PORT_PREFIX);
+		itf = SerialInterfaceFactory.getBestInterface(FileHelperFactory.getConfig().get(ConfigFileHelper.RFID_PORT_PREFIX));
 		itf.addObserver(this);
-		
+
 	}
 
 	public void run() {
@@ -73,7 +75,7 @@ public class App implements Observer {
 				LOG.warn("Refused for RFID " + rfid);
 			} else {
 				LOG.info("Granted for user " + u.getName());
-				
+
 				ioManager.openDoorShortly();
 			}
 		} else {

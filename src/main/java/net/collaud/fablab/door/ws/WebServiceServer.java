@@ -1,9 +1,10 @@
 package net.collaud.fablab.door.ws;
 
-import net.collaud.fablab.door.Constants;
+import net.collaud.fablab.common.ws.WebServicePath;
+import net.collaud.fablab.door.file.ConfigFileHelper;
+import net.collaud.fablab.door.file.FileHelperFactory;
 import net.collaud.fablab.door.ws.controller.DoorController;
 import net.collaud.fablab.door.ws.controller.PingController;
-import net.collaud.fablab.common.ws.WebServicePath;
 import org.apache.log4j.Logger;
 import org.restexpress.Request;
 import org.restexpress.Response;
@@ -31,7 +32,7 @@ public class WebServiceServer {
 	
 	private WebServiceServer() {
 		server = new RestExpress();
-		server.setPort(Constants.WEBSERVICE_PORT);
+		server.setPort(FileHelperFactory.getConfig().getAsInt(ConfigFileHelper.WEBSERVICE_PORT));
 		
 		registerUrl("/" + WebServicePath.BASE_URL + "/" + WebServicePath.PING_URL, new PingController());
 		registerUrl("/" + WebServicePath.BASE_URL + "/" + WebServicePath.DOOR_URL, new DoorController());
