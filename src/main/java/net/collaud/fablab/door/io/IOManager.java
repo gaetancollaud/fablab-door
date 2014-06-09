@@ -12,8 +12,10 @@ import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 import net.collaud.fablab.common.file.FileHelper;
+import net.collaud.fablab.common.ws.exception.WebServiceException;
 import net.collaud.fablab.door.file.ConfigFileHelper;
 import net.collaud.fablab.door.file.FileHelperFactory;
+import net.collaud.fablab.door.ws.client.DoorClient;
 import org.apache.log4j.Logger;
 
 /**
@@ -34,6 +36,8 @@ public class IOManager {
 
 	private static IOManager instance;
 
+	private DoorClient doorWs;
+
 	public static final IOManager getInstance() {
 		if (instance == null) {
 			instance = new IOManager();
@@ -47,7 +51,8 @@ public class IOManager {
 	private final IPX800 ipx800;
 	private final Optional<PiFace> piface;
 
-	private final Timer timer;
+	private final Timer timerFast;
+	private final Timer timerWebService;
 	private Optional<TimerTask> currentTask;
 
 	private IOManager() {
@@ -60,10 +65,17 @@ public class IOManager {
 		} catch (IOException ex) {
 			LOG.error("Cannot instanciate piface !", ex);
 		}
+
+		doorWs = new DoorClient();
+
 		piface = Optional.ofNullable(pf);
-		timer = new Timer();
 		
-		timer.schedule(new LedStateTask(), 0, 100);
+		timerFast = new Timer();
+		timerFast.schedule(new LedStateTask(), 0, 100);
+		
+		timerWebService = new Timer();
+		timerWebService.schedule(new WebserviceStateTask(), 0, 1000);
+
 	}
 
 	private void addButtonListeners(PiFace pf) {
@@ -126,7 +138,7 @@ public class IOManager {
 
 	private void alarmOn() {
 		if (!alarmOn) {
-			timer.schedule(new OnOffWithDelay(() -> {
+			timerFast.schedule(new OnOffWithDelay(() -> {
 				piface.ifPresent(pf -> pf.getOutputPin(ALARM_PIN_ON).high());
 			}, ALARM_ON_OFF_DELAY, () -> {
 				piface.ifPresent(pf -> pf.getOutputPin(ALARM_PIN_ON).low());
@@ -137,7 +149,7 @@ public class IOManager {
 
 	private void alarmOff() {
 		if (alarmOn) {
-			timer.schedule(new OnOffWithDelay(() -> {
+			timerFast.schedule(new OnOffWithDelay(() -> {
 				piface.ifPresent(pf -> pf.getOutputPin(ALARM_PIN_OFF).high());
 			}, ALARM_ON_OFF_DELAY, () -> {
 				piface.ifPresent(pf -> pf.getOutputPin(ALARM_PIN_OFF).low());
@@ -175,7 +187,7 @@ public class IOManager {
 	private void createOpenDoorShortlyTask() {
 		cancelOpenDoorShortlyTask();
 		currentTask = Optional.of(new OpenDoorShortlyTask());
-		timer.schedule(currentTask.get(), FileHelperFactory.getConfig().getAsInt(ConfigFileHelper.OPEN_DOOR_SHORTLY_DELAY));
+		timerFast.schedule(currentTask.get(), FileHelperFactory.getConfig().getAsInt(ConfigFileHelper.OPEN_DOOR_SHORTLY_DELAY));
 
 	}
 
@@ -226,20 +238,19 @@ public class IOManager {
 	}
 
 	protected class LedStateTask extends TimerTask {
-		
+
 		private boolean lastState = true;
 
 		@Override
 		public void run() {
+
 			piface.ifPresent(pf -> {
 				if (alarmOn && lastState) {
 					pf.getOutputPin(STATUS_PIN_ALARM).high();
 				} else {
 					pf.getOutputPin(STATUS_PIN_ALARM).low();
 				}
-				
-				
-				
+
 				if (doorOpen) {
 					pf.getOutputPin(STATUS_PIN_DOOR).low();
 				} else {
@@ -247,6 +258,27 @@ public class IOManager {
 				}
 			});
 			lastState = !lastState;
+		}
+
+	}
+
+	protected class WebserviceStateTask extends TimerTask {
+
+		private boolean lastAlarmOn = alarmOn;
+		private boolean lastDoorOpen = doorOpen;
+
+		@Override
+		public void run() {
+			if (lastAlarmOn != alarmOn || lastDoorOpen != doorOpen) {
+				lastAlarmOn = alarmOn;
+				lastDoorOpen = doorOpen;
+				try {
+					doorWs.doorStatus(doorOpen, alarmOn, null);
+				} catch (WebServiceException ex) {
+					LOG.error("Cannot contact main server to indicate door status", ex);
+				}
+			}
+
 		}
 
 	}
