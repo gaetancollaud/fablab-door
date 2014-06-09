@@ -1,54 +1,63 @@
 package net.collaud.fablab.door.ws.client;
 
-import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
+import net.collaud.fablab.common.file.FileHelper;
 import net.collaud.fablab.common.ws.WebServicePath;
+import net.collaud.fablab.common.ws.client.AbstractClient;
+import net.collaud.fablab.common.ws.exception.WebServiceException;
 import net.collaud.fablab.common.ws.response.OpenDoorResponse;
+import net.collaud.fablab.door.file.ConfigFileHelper;
+import net.collaud.fablab.door.file.FileHelperFactory;
 
 /**
- * Jersey REST client generated for REST resource:DoorResource [door]<br>
- * USAGE:
- * <pre>
- *        DoorClient client = new DoorClient();
- *        Object response = client.XXX(...);
- *        // do whatever with response
- *        client.close();
- * </pre>
  *
  * @author gaetan
  */
-public class DoorClient {
-	private WebTarget webTarget;
-	private Client client;
-	private static final String BASE_URI = "http://localhost:8080/"+WebServicePath.BASE_URL;
+public class DoorClient extends AbstractClient{
+	private final WebTarget baseWebTarget;
+	private final Client client;
+	private final String token;
 
 	public DoorClient() {
-		client = javax.ws.rs.client.ClientBuilder.newClient();
-		webTarget = client.target(BASE_URI).path(WebServicePath.DOOR_URL);
+		client = ClientBuilder.newClient();
+		FileHelper<ConfigFileHelper> config = FileHelperFactory.getConfig();
+		token = config.get(ConfigFileHelper.WEBSERVICE_TOKEN);
+		String host = "http://"+config.get(ConfigFileHelper.WEBSERVICE_TARGET_ADDR, "localhost")+":"+config.get(ConfigFileHelper.WEBSERVICE_TARGET_PORT, "80");
+		baseWebTarget = client.target(host).path(WebServicePath.BASE_URL).path(WebServicePath.DOOR_URL);
 	}
 
-	public OpenDoorResponse open(String rfid, String token) throws ClientErrorException {
-		WebTarget resource = webTarget;
+	public OpenDoorResponse open(String rfid) throws  WebServiceException {
+		WebTarget resource = baseWebTarget.path(WebServicePath.DOOR_REQUEST_OPEN);
 		resource = resource.queryParam(WebServicePath.PARAM_RFID, rfid);
 		resource = resource.queryParam(WebServicePath.PARAM_TOKEN, token);
-		resource = resource.path(WebServicePath.DOOR_REQUEST_OPEN);
-		return resource.request(MediaType.APPLICATION_XML).get(OpenDoorResponse.class);
+		return requestXml(resource, OpenDoorResponse.class);
+	}
+	
+	public void doorStatus(boolean doorOpen, boolean alarmOn, String lastRfid) throws WebServiceException{
+		WebTarget resource = baseWebTarget.path(WebServicePath.DOOR_STATUS);
+		resource = resource.queryParam(WebServicePath.PARAM_DOOR_OPEN, doorOpen);
+		resource = resource.queryParam(WebServicePath.PARAM_ALARM_ON, alarmOn);
+		resource = resource.queryParam(WebServicePath.PARAM_RFID, lastRfid);
+		requestXml(resource, Object.class);
 	}
 
 	public void close() {
 		client.close();
 	}
 	
-	public static void main(String[] args) {
-		DoorClient dc = new DoorClient();
-		//OpenDoorResponse openResponse = dc.open("6F005C7E99D4", "salut");
-		OpenDoorResponse openResponse = dc.open("badsfas", "salut");
-		System.out.println("granted : " +openResponse.isGranted());
-		if(openResponse.isError()){
-			System.out.println("error "+openResponse.getErrors().get(0));
-		}
-	}
+//	public static void main(String[] args) throws WebServiceException {
+//		DoorClient dc = new DoorClient();
+//		//OpenDoorResponse openResponse = dc.open("6F005C7E99D4", "salut");
+//		OpenDoorResponse openResponse = dc.open("badsfas");
+//		System.out.println("granted : " +openResponse.isGranted());
+//		if(openResponse.isError()){
+//			System.out.println("error "+openResponse.getErrors().get(0));
+//		}
+//		System.out.println("==================================");
+//		dc.doorStatus(false, true, "myrfid");
+//		dc.close();
+//	}
 	
 }

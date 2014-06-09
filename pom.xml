@@ -99,50 +99,53 @@
 	</build>
 	
 	<dependencies>
+		
+		<!-- Fablab -->
 		<dependency>
 			<groupId>net.collaud.fablab</groupId>
 			<artifactId>fablab-common</artifactId>
 			<version>1.0</version>
 		</dependency>
 		
-		<dependency>
-			<groupId>com.strategicgains</groupId>
-			<artifactId>RestExpress</artifactId>
-			<version>0.10.3</version>
-		</dependency>
-		
+		<!-- Testing -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- Logging -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
+		
+		<!-- Webservice Server -->
+		<dependency>
+			<groupId>com.strategicgains</groupId>
+			<artifactId>RestExpress</artifactId>
+			<version>0.10.3</version>
+		</dependency>
+		
+		<!-- Client -->
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
 			<version>2.0</version>
 			<type>jar</type>
 		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.containers</groupId>
-			<artifactId>jersey-container-servlet</artifactId>
-			<version>2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>2.0</version>
-		</dependency>
+		
+		<!-- Serial -->
 		<dependency>
 			<groupId>org.rxtx</groupId>
 			<artifactId>rxtx</artifactId>
 			<version>2.1.7</version>
 		</dependency>
+		
+		
+		<!-- IO -->
 		<dependency>
 			<groupId>com.pi4j</groupId>
 			<artifactId>pi4j-core</artifactId>
