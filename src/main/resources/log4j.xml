@@ -25,5 +25,8 @@
     <logger name="net.collaud.fablab.door.ws">
         <level value="debug"/>
     </logger>
+    <logger name="net.collaud.fablab.door.io">
+        <level value="trace"/>
+    </logger>
 	
 </log4j:configuration>

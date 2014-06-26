@@ -76,7 +76,7 @@ public class App implements Observer {
 			} else {
 				LOG.info("Granted for user " + u.getName());
 
-				ioManager.openDoorShortly();
+				ioManager.buttonOpenDoorShortlyPressed();
 			}
 		} else {
 			LOG.error("Observer received wrong arg : " + arg.toString());

@@ -22,16 +22,16 @@ public class DoorController {
 		IOManager io = IOManager.getInstance();
 		switch(action){
 			case "openPermanently":
-				io.openDoorPermanently();
+				io.buttonOpenDoorPressed();
 				break;
 			case "openShortly":
-				io.openDoorShortly();
+				io.buttonOpenDoorShortlyPressed();
 				break;
 			case "closePermanently":
-				io.closeDoorPermanenlty();
+				io.buttonCloseDoorPressed();
 				break;
 			case "exit":
-				io.closeDoorAndActivateAlarm();
+				io.buttonExitPressed();
 				break;
 			default:
 				LOG.error("Unknown action : "+action);

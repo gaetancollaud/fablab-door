@@ -1,40 +1,52 @@
-package net.collaud.fablab.door.io;
+package net.collaud.fablab.door.io.ipx800;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.util.concurrent.Semaphore;
 import org.apache.log4j.Logger;
 
 /**
  *
  * @author gaetan
  */
-public class IPX800 implements RelayManager {
+public class IPX800Connector implements IPXRelays {
 
-	private static final Logger LOG = Logger.getLogger(IPX800.class);
+	private static final Logger LOG = Logger.getLogger(IPX800Connector.class);
 
 	protected String addr;
 	protected int port;
 	protected Socket socket;
 	protected BufferedWriter writer;
 	protected BufferedReader reader;
+	protected Semaphore semWaitDisconnect;
+	protected IPX800Reader readerThread;
 
-	protected IPX800(String addr, int port) {
+	public IPX800Connector(String addr, int port) {
 		this.addr = addr;
 		this.port = port;
-		connect();
+		semWaitDisconnect = new Semaphore(0);
 	}
 
-	private void connect() {
-			//FIXME remove comments
-//		try {
-//			socket = new Socket(InetAddress.getByName(addr), port);
-//			writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-//			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//		} catch (IOException ex) {
-//			LOG.error("Cannot connect to IPX800 at " + addr + ":" + port, ex);
-//		}
+	public boolean connect() {
+		try {
+			LOG.trace("Trying to connect to "+addr+":"+port);
+			socket = new Socket(InetAddress.getByName(addr), port);
+			writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			readerThread = new IPX800Reader();
+			readerThread.start();
+			LOG.debug("Connected to "+addr+":"+port);
+			return true;
+		} catch (IOException ex) {
+			LOG.error("Cannot connect to IPX800 at " + addr + ":" + port+" reason "+ex.getMessage());
+			semWaitDisconnect.release(10000000);
+			return false;
+		}
 	}
 
 	@Override
@@ -70,9 +82,39 @@ public class IPX800 implements RelayManager {
 				}
 			} catch (IOException ex) {
 				LOG.error("Cannot write command", ex);
+				try {
+					reader.close();
+					writer.close();
+					socket.close();
+				} catch (IOException ex1) {
+				}
+				semWaitDisconnect.release(100000);
 			}
 		} else {
 			LOG.error("IPX800 not connected, cannot send command : " + sb.toString());
+		}
+	}
+
+	void waitForDisconnect() throws InterruptedException {
+		semWaitDisconnect.acquire();
+	}
+
+	public class IPX800Reader extends Thread {
+
+		@Override
+		public void run() {
+			while (true) {
+				try {
+					String line;
+					while ((line = reader.readLine()) != null) {
+						LOG.debug("IPX800 sent " + line);
+					}
+				} catch (IOException ex) {
+					LOG.error("Cannot read ipx800", ex);
+					break;
+				}
+			}
+			semWaitDisconnect.release(1000000);
 		}
 	}
 
