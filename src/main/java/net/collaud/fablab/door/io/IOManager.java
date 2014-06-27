@@ -27,6 +27,8 @@ public class IOManager implements DoorInputListener {
 	private static IOManager instance;
 
 	private final DoorClient doorWs;
+	
+	private String lastRFID;
 
 	public static final IOManager getInstance() {
 		if (instance == null) {
@@ -47,6 +49,8 @@ public class IOManager implements DoorInputListener {
 
 	private IOManager() {
 		LOG.trace("Init IOManager");
+		
+		currentTask = Optional.empty();
 
 		LOG.trace("Init output systems");
 		outputSystems = new ArrayList<>();
@@ -204,7 +208,10 @@ public class IOManager implements DoorInputListener {
 				LOG.warn("OnOffWithDelay interrupted", ex);
 			}
 		}
+	}
 
+	public void setLastRFID(String lastRFID) {
+		this.lastRFID = lastRFID;
 	}
 
 	protected class LedStateTask extends TimerTask {
@@ -249,7 +256,8 @@ public class IOManager implements DoorInputListener {
 				lastAlarmOn = alarmOn;
 				lastDoorOpen = doorOpen;
 				try {
-					doorWs.doorStatus(doorOpen, alarmOn, null);
+					doorWs.doorStatus(doorOpen, alarmOn, lastRFID);
+					lastRFID = null;
 				} catch (WebServiceException ex) {
 					LOG.error("Cannot contact main server to indicate door status", ex);
 				}

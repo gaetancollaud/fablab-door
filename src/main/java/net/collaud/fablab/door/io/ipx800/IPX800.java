@@ -30,12 +30,12 @@ public class IPX800 extends IOSystem {
 
 	@Override
 	public void setAlarmOnPressed(boolean pressed) {
-		connector.ifPresent(con -> con.setRelay(IPXRelays.Relay.RELAY_7, pressed));
+		connector.ifPresent(con -> con.setRelay(IPXRelays.Relay.RELAY_4, pressed));
 	}
 
 	@Override
 	public void setAlarmOffPressed(boolean pressed) {
-		connector.ifPresent(con -> con.setRelay(IPXRelays.Relay.RELAY_8, pressed));
+		connector.ifPresent(con -> con.setRelay(IPXRelays.Relay.RELAY_5, pressed));
 	}
 
 	@Override

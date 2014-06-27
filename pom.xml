@@ -77,7 +77,7 @@
 						<configuration>
 							<fromFile>${project.build.directory}/${project.build.finalName}-jar-with-dependencies.jar</fromFile>
 							<toFile>/fablab/fablab-door.jar</toFile>
-							<url>scp://172.17.10.50</url>
+							<url>scp://raspdoor.fablab.local</url>
 							<serverId>fablab-door</serverId>
 						</configuration>
 					</execution>

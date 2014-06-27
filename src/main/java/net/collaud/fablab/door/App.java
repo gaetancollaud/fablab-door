@@ -75,7 +75,7 @@ public class App implements Observer {
 				LOG.warn("Refused for RFID " + rfid);
 			} else {
 				LOG.info("Granted for user " + u.getName());
-
+				ioManager.setLastRFID(rfid);
 				ioManager.buttonOpenDoorShortlyPressed();
 			}
 		} else {
