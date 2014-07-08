@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import net.collaud.fablab.common.ws.data.DoorAction;
 import net.collaud.fablab.door.file.ConfigFileHelper;
 import net.collaud.fablab.door.file.FileHelperFactory;
 import net.collaud.fablab.door.io.IOManager;
 import net.collaud.fablab.door.serial.SerialInterface;
 import net.collaud.fablab.door.serial.SerialInterfaceFactory;
+import net.collaud.fablab.door.ws.DoorEventNotifier;
 import net.collaud.fablab.door.ws.WebServiceServer;
 import net.collaud.fablab.door.xml.XmlParser;
 import net.collaud.fablab.door.xml.entities.User;
@@ -33,13 +35,6 @@ public class App implements Observer {
 		app.run();
 	}
 
-	public void createOneUser() {
-		LOG.info("create one User");
-		Users listUsers = new Users();
-		listUsers.getListUsers().add(new User("6F005CC09467", "gaetan"));
-		XmlParser.writeUsers(listUsers);
-	}
-
 	public App() {
 		WebServiceServer.getInstance(); //start webservice
 
@@ -53,7 +48,6 @@ public class App implements Observer {
 		LOG.info("Start serial interface");
 		itf = SerialInterfaceFactory.getBestInterface(FileHelperFactory.getConfig().get(ConfigFileHelper.RFID_PORT_PREFIX));
 		itf.addObserver(this);
-
 	}
 
 	public void run() {
@@ -73,10 +67,11 @@ public class App implements Observer {
 			User u = users.get(rfid);
 			if (u == null) {
 				LOG.warn("Refused for RFID " + rfid);
+				DoorEventNotifier.getInstance().notifyEvent(rfid, DoorAction.TRY_OPEN_BUT_FAIL);
 			} else {
 				LOG.info("Granted for user " + u.getName());
-				ioManager.setLastRFID(rfid);
 				ioManager.buttonOpenDoorShortlyPressed();
+				DoorEventNotifier.getInstance().notifyEvent(rfid, DoorAction.OPEN);
 			}
 		} else {
 			LOG.error("Observer received wrong arg : " + arg.toString());

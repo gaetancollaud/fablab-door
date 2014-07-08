@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
-import net.collaud.fablab.common.ws.exception.WebServiceException;
+import net.collaud.fablab.common.ws.data.DoorAction;
 import net.collaud.fablab.door.file.ConfigFileHelper;
 import net.collaud.fablab.door.file.FileHelperFactory;
 import net.collaud.fablab.door.io.ipx800.IPX800;
 import net.collaud.fablab.door.io.piface.PiFaceImpl;
 import net.collaud.fablab.door.io.piface.PiFaceInput;
-import net.collaud.fablab.door.ws.client.DoorClient;
+import net.collaud.fablab.door.ws.DoorEventNotifier;
 import org.apache.log4j.Logger;
 
 /**
@@ -25,10 +25,6 @@ public class IOManager implements DoorInputListener {
 	private static final Logger LOG = Logger.getLogger(IOManager.class);
 
 	private static IOManager instance;
-
-	private final DoorClient doorWs;
-	
-	private String lastRFID;
 
 	public static final IOManager getInstance() {
 		if (instance == null) {
@@ -49,14 +45,13 @@ public class IOManager implements DoorInputListener {
 
 	private IOManager() {
 		LOG.trace("Init IOManager");
-		
+
 		currentTask = Optional.empty();
 
 		LOG.trace("Init output systems");
 		outputSystems = new ArrayList<>();
 		outputSystems.add(new PiFaceImpl());
 		outputSystems.add(new IPX800());
-
 
 		LOG.trace("Init Timer");
 		timerFast = new Timer();
@@ -67,9 +62,8 @@ public class IOManager implements DoorInputListener {
 
 		LOG.trace("Init listeners");
 		PiFaceInput.addListener(this);
-		
+
 		LOG.trace("Init webservice");
-		doorWs = new DoorClient();
 	}
 
 	@Override
@@ -78,7 +72,7 @@ public class IOManager implements DoorInputListener {
 		if (doorOpen()) {
 			//set to true, only if door just open
 			doorOpenShortly = true;
-			
+
 			//door is now open, close it after the delay
 			createOpenDoorShortlyTask();
 		}
@@ -101,6 +95,7 @@ public class IOManager implements DoorInputListener {
 	synchronized public void buttonExitPressed() {
 		doorClose();
 		alarmOn();
+		DoorEventNotifier.getInstance().notifyEvent(null, DoorAction.CLOSE);
 	}
 
 	synchronized public boolean isAlarmOn() {
@@ -210,10 +205,6 @@ public class IOManager implements DoorInputListener {
 		}
 	}
 
-	public void setLastRFID(String lastRFID) {
-		this.lastRFID = lastRFID;
-	}
-
 	protected class LedStateTask extends TimerTask {
 
 		private boolean lastState = true;
@@ -242,7 +233,6 @@ public class IOManager implements DoorInputListener {
 			}
 			lastState = !lastState;
 		}
-
 	}
 
 	protected class WebserviceStateTask extends TimerTask {
@@ -255,12 +245,6 @@ public class IOManager implements DoorInputListener {
 			if (lastAlarmOn != alarmOn || lastDoorOpen != doorOpen) {
 				lastAlarmOn = alarmOn;
 				lastDoorOpen = doorOpen;
-				try {
-					doorWs.doorStatus(doorOpen, alarmOn, lastRFID);
-					lastRFID = null;
-				} catch (WebServiceException ex) {
-					LOG.error("Cannot contact main server to indicate door status", ex);
-				}
 			}
 		}
 	}
