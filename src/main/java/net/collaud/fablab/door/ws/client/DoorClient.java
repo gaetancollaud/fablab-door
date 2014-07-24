@@ -1,13 +1,15 @@
 package net.collaud.fablab.door.ws.client;
 
+import java.util.List;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import net.collaud.fablab.common.file.FileHelper;
 import net.collaud.fablab.common.ws.WebServicePath;
 import net.collaud.fablab.common.ws.client.AbstractClient;
+import net.collaud.fablab.common.ws.data.DoorAction;
+import net.collaud.fablab.common.ws.data.UserWithRFID;
 import net.collaud.fablab.common.ws.exception.WebServiceException;
-import net.collaud.fablab.common.ws.response.OpenDoorResponse;
 import net.collaud.fablab.door.file.ConfigFileHelper;
 import net.collaud.fablab.door.file.FileHelperFactory;
 
@@ -28,20 +30,35 @@ public class DoorClient extends AbstractClient{
 		baseWebTarget = client.target(host).path(WebServicePath.BASE_URL).path(WebServicePath.DOOR_URL);
 	}
 
-	public OpenDoorResponse open(String rfid) throws  WebServiceException {
-		WebTarget resource = baseWebTarget.path(WebServicePath.DOOR_REQUEST_OPEN);
-		resource = resource.queryParam(WebServicePath.PARAM_RFID, rfid);
+//	public OpenDoorResponse open(String rfid) throws  WebServiceException {
+//		WebTarget resource = baseWebTarget.path(WebServicePath.DOOR_REQUEST_OPEN);
+//		resource = resource.queryParam(WebServicePath.PARAM_RFID, rfid);
+//		resource = resource.queryParam(WebServicePath.PARAM_TOKEN, token);
+//		return requestXml(resource, OpenDoorResponse.class);
+//	}
+	
+//	public void doorStatus(boolean doorOpen, boolean alarmOn, String lastRfid) throws WebServiceException{
+//		WebTarget resource = baseWebTarget.path(WebServicePath.DOOR_STATUS);
+//		resource = resource.queryParam(WebServicePath.PARAM_DOOR_OPEN, doorOpen);
+//		resource = resource.queryParam(WebServicePath.PARAM_ALARM_ON, alarmOn);
+//		resource = resource.queryParam(WebServicePath.PARAM_RFID, lastRfid);
+//		requestXml(resource, Object.class);
+//	}
+	
+	public List<UserWithRFID> getAuthorizedUsers() throws WebServiceException{
+		WebTarget resource = baseWebTarget.path(WebServicePath.DOOR_AUTH_USERS);
 		resource = resource.queryParam(WebServicePath.PARAM_TOKEN, token);
-		return requestXml(resource, OpenDoorResponse.class);
+		return requestXml(resource, List.class);
 	}
 	
-	public void doorStatus(boolean doorOpen, boolean alarmOn, String lastRfid) throws WebServiceException{
+	public void doorEvent(String rfid, DoorAction action) throws WebServiceException{
 		WebTarget resource = baseWebTarget.path(WebServicePath.DOOR_STATUS);
-		resource = resource.queryParam(WebServicePath.PARAM_DOOR_OPEN, doorOpen);
-		resource = resource.queryParam(WebServicePath.PARAM_ALARM_ON, alarmOn);
-		resource = resource.queryParam(WebServicePath.PARAM_RFID, lastRfid);
+		resource = resource.queryParam(WebServicePath.PARAM_DOOR_EVENT_ACTION, action);
+		resource = resource.queryParam(WebServicePath.PARAM_RFID, rfid);
+		resource = resource.queryParam(WebServicePath.PARAM_TOKEN, token);
 		requestXml(resource, Object.class);
 	}
+	
 
 	public void close() {
 		client.close();
