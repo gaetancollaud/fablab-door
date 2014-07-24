@@ -37,8 +37,8 @@ public class IOManager implements DoorInputListener {
 		return instance;
 	}
 
-	private boolean alarmOn = false;
-	private boolean doorOpen = true;
+	private boolean alarmOn = true;
+	private boolean doorOpen = false;
 	private boolean doorOpenShortly = false;
 
 	private final Timer timerFast;
