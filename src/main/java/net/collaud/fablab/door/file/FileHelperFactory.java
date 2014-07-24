@@ -10,7 +10,7 @@ import net.collaud.fablab.common.file.FileHelperException;
  */
 public class FileHelperFactory extends AbstractFileHelperFactory {
 	
-	public static final String FILE_CONFIG = "config.properties";
+	public static final String FILE_CONFIG = "/fablab/config.properties";
 	public static final int ID_CONFIG = 1;
 
 	private static FileHelperFactory instance;
