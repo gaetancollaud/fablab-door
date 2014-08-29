@@ -2,6 +2,7 @@ package net.collaud.fablab.door.ws;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Level;
 import net.collaud.fablab.common.ws.data.DoorAction;
 import net.collaud.fablab.common.ws.exception.WebServiceException;
 import net.collaud.fablab.door.ws.client.DoorClient;
@@ -30,7 +31,7 @@ public class DoorEventNotifier extends Thread {
 
 	synchronized public static DoorEventNotifier getInstance() {
 		if (instance == null) {
-			return instance;
+			instance = new DoorEventNotifier();
 		}
 		return instance;
 	}
@@ -46,21 +47,30 @@ public class DoorEventNotifier extends Thread {
 	}
 
 	public void notifyEvent(String rfid, DoorAction action) {
+		LOG.info("add event rfid="+rfid+" action="+action);
 		queue.add(new DoorEvent(rfid, action));
 	}
 
 	@Override
 	public void run() {
 		while (true) {
-			DoorEvent event = queue.peek();
-			try {
-				doorWs.doorEvent(event.rfid, event.action);
-				queue.remove();
-			} catch (WebServiceException ex) {
-				LOG.error("Cannot send event " + event.rfid, ex);
+			//Take and remove
+			DoorEvent event = queue.poll();
+			if (event != null) {
 				try {
+					doorWs.doorEvent(event.rfid, event.action);
+				} catch (WebServiceException ex) {
+					LOG.error("Cannot send event " + event.rfid, ex);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException ex1) {
+					}
+				}
+			} else {
+				try {
+					//check queue every second
 					Thread.sleep(1000);
-				} catch (InterruptedException ex1) {
+				} catch (InterruptedException ex) {
 				}
 			}
 		}

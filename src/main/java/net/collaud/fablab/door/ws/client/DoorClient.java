@@ -52,7 +52,7 @@ public class DoorClient extends AbstractClient{
 	}
 	
 	public void doorEvent(String rfid, DoorAction action) throws WebServiceException{
-		WebTarget resource = baseWebTarget.path(WebServicePath.DOOR_STATUS);
+		WebTarget resource = baseWebTarget.path(WebServicePath.DOOR_EVENT);
 		resource = resource.queryParam(WebServicePath.PARAM_DOOR_EVENT_ACTION, action);
 		resource = resource.queryParam(WebServicePath.PARAM_RFID, rfid);
 		resource = resource.queryParam(WebServicePath.PARAM_TOKEN, token);
