@@ -64,14 +64,16 @@ public class App implements Observer {
 	public void update(Observable o, Object arg) {
 		if (arg instanceof String) {
 			String rfid = ((String) arg).trim().toUpperCase();
-			User u = users.get(rfid);
-			if (u == null) {
-				LOG.warn("Refused for RFID " + rfid);
-				DoorEventNotifier.getInstance().notifyEvent(rfid, DoorAction.TRY_OPEN_BUT_FAIL);
-			} else {
-				LOG.info("Granted for user " + u.getName());
-				ioManager.buttonOpenDoorShortlyPressed();
-				DoorEventNotifier.getInstance().notifyEvent(rfid, DoorAction.OPEN);
+			if (!rfid.isEmpty()) {
+				User u = users.get(rfid);
+				if (u == null) {
+					LOG.warn("Refused for RFID " + rfid);
+					DoorEventNotifier.getInstance().notifyEvent(rfid, DoorAction.TRY_OPEN_BUT_FAIL);
+				} else {
+					LOG.info("Granted for user " + u.getName());
+					ioManager.buttonOpenDoorShortlyPressed();
+					DoorEventNotifier.getInstance().notifyEvent(rfid, DoorAction.OPEN);
+				}
 			}
 		} else {
 			LOG.error("Observer received wrong arg : " + arg.toString());

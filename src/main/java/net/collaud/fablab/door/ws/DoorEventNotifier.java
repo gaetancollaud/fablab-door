@@ -68,6 +68,7 @@ public class DoorEventNotifier extends Thread {
 				}
 			} else {
 				try {
+					//FIXME use semaphore instead
 					//check queue every second
 					Thread.sleep(1000);
 				} catch (InterruptedException ex) {
