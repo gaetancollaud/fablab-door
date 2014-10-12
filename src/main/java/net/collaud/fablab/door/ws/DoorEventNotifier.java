@@ -47,16 +47,16 @@ public class DoorEventNotifier extends Thread {
 	}
 
 	public void notifyEvent(String rfid, DoorAction action) {
-		LOG.info("add event rfid="+rfid+" action="+action);
+		LOG.info("add event rfid=" + rfid + " action=" + action);
 		queue.add(new DoorEvent(rfid, action));
 	}
 
 	@Override
 	public void run() {
 		while (true) {
-			//Take and remove
-			DoorEvent event = queue.poll();
-			if (event != null) {
+			try {
+				//Wait, take and remove
+				DoorEvent event = queue.take();
 				try {
 					doorWs.doorEvent(event.rfid, event.action);
 				} catch (WebServiceException ex) {
@@ -66,14 +66,11 @@ public class DoorEventNotifier extends Thread {
 					} catch (InterruptedException ex1) {
 					}
 				}
-			} else {
-				try {
-					//FIXME use semaphore instead
-					//check queue every second
-					Thread.sleep(1000);
-				} catch (InterruptedException ex) {
-				}
+
+			} catch (InterruptedException ex) {
+				//Nothing to do here
 			}
+
 		}
 	}
 
