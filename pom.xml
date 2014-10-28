@@ -111,7 +111,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
 		
@@ -183,7 +183,7 @@
 			<url>https://oss.sonatype.org/content/groups/public</url>
 			<snapshots>
 				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
+				<updatePolicy>daily</updatePolicy>
 			</snapshots>
 		</repository>
 	</repositories>

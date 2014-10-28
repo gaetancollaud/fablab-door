@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<users>
+        <user rfid="12006CDA49ED" name="charly" />
+        <user rfid="12006BAFDA0C" name="david" />
+        <user rfid="12006B57C4EA" name="florian" />
+        <user rfid="12006BAD66B2" name="dylan" />
+        <user rfid="1200508A68A0" name="romain" />
+        <user rfid="12006BAFE731" name="julien" />
+        <user rfid="1200508A67AF" name="agnes" />
+        <user rfid="12005065F6D1" name="benoit" />
+        <user rfid="120050C9ED66" name="gaetan" />
+        <user rfid="12006CDA4AEE" name="marie" />
+        <user rfid="12006BAD5B8F" name="michel" />
+        <user rfid="1200508A7DB5" name="bluefactory" />
+        <user rfid="12007785E303" name="margaux" />
+
+		<user rfid="6F005C7E99D4" name="eia-fr" >
+			<schedule dayOfWeek="2,3,4,5,6" start="7:00" end="17:00" />
+		</user>
+
+        <user rfid="12006C5F98B9" name="cyril crepeau" />
+
+<!--
+        <user rfid="6F005CC09467" name="gaetan old"/>
+        <user rfid="6F005C7E99D4" name="dylan old" />
+        <user rfid="12006C66CCD4" name="florian old" />
+        <user rfid="12006B9A4AA9" name="marie old" />
+        <user rfid="12006CB08C42" name="michel old" />
+        <user rfid="12006BDC09AC" name="benoit old" />
+        <user rfid="12007785CF2F" name="romain old" />
+        <user rfid="12006CB08F41" name="julien old" />
+        <user rfid="12007785D232" name="agnes old" />
+        <user rfid="1200710FC4A8" name="charly old" />
+        <user rfid="12006C66958D" name="david old" />
+-->
+</users>
