@@ -2,6 +2,7 @@ package net.collaud.fablab.raspberry.xml;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Random;
 import static junit.framework.TestCase.*;
 import net.collaud.fablab.door.file.FileHelperFactory;
 import net.collaud.fablab.door.xml.XmlParser;
@@ -18,6 +19,7 @@ import org.junit.Test;
 public class TestSchedule  {
 	private final User user1;
 	private final User user2;
+	private final User user3;
 	
 	@Before
 	public void setup(){
@@ -30,6 +32,7 @@ public class TestSchedule  {
 		Schedule schedule3 = new Schedule("1,7", "7:00", "18:00");
 		user1 = new User("rfid1", "username1", Arrays.asList(new Schedule[]{schedule1, schedule2}));
 		user2 = new User("rfid2", "username2", Arrays.asList(new Schedule[]{schedule3}));
+		user3 = new User("rfid3", "username3");
 	}
 
 	@Test
@@ -72,6 +75,17 @@ public class TestSchedule  {
 		assertFalse(user2.hasAccessAtDate(getCalendar(Calendar.WEDNESDAY, 10, 00)));
 		assertFalse(user2.hasAccessAtDate(getCalendar(Calendar.THURSDAY, 10, 00)));
 		assertFalse(user2.hasAccessAtDate(getCalendar(Calendar.FRIDAY, 10, 00)));
+	}
+	
+	@Test
+	public void testNoSchedule(){
+		Random r = new Random(2925234);
+		for(int i=0; i<1000; i++){
+			assertTrue(user3.hasAccessAtDate(getCalendar(
+					r.nextInt(7)+1,//1-7
+					r.nextInt(24),//0-23
+					r.nextInt(60))));//0-59
+		}
 	}
 	
 	protected Calendar getCalendar(int dayOfWeek, int hour, int min){

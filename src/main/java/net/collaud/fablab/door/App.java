@@ -1,5 +1,6 @@
 package net.collaud.fablab.door;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
@@ -70,9 +71,14 @@ public class App implements Observer {
 					LOG.warn("Refused for RFID " + rfid);
 					DoorEventNotifier.getInstance().notifyEvent(rfid, DoorAction.TRY_OPEN_BUT_FAIL);
 				} else {
-					LOG.info("Granted for user " + u.getName());
-					ioManager.buttonOpenDoorShortlyPressed();
-					DoorEventNotifier.getInstance().notifyEvent(rfid, DoorAction.OPEN);
+					if (u.hasAccessAtDate(Calendar.getInstance())) {
+						LOG.info("Granted for user " + u.getName());
+						ioManager.buttonOpenDoorShortlyPressed();
+						DoorEventNotifier.getInstance().notifyEvent(rfid, DoorAction.OPEN);
+					} else {
+						LOG.warn("Refused for RFID " + rfid + " because of schedule");
+						DoorEventNotifier.getInstance().notifyEvent(rfid, DoorAction.TRY_OPEN_BUT_FAIL);
+					}
 				}
 			}
 		} else {

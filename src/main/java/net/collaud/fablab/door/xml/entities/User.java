@@ -62,8 +62,11 @@ public class User {
 	public void setSchedule(List<Schedule> schedule) {
 		this.schedule = schedule;
 	}
-	
-	public boolean hasAccessAtDate(Calendar date){
+
+	public boolean hasAccessAtDate(Calendar date) {
+		if (schedule == null || schedule.isEmpty()) {
+			return true;
+		}
 		return schedule.stream().anyMatch(s -> s.hasAccessAtDate(date));
 	}
 
