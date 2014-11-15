@@ -5,10 +5,8 @@ import java.util.Calendar;
 import java.util.Random;
 import static junit.framework.TestCase.*;
 import net.collaud.fablab.door.file.FileHelperFactory;
-import net.collaud.fablab.door.xml.XmlParser;
 import net.collaud.fablab.door.xml.entities.Schedule;
 import net.collaud.fablab.door.xml.entities.User;
-import net.collaud.fablab.door.xml.entities.Users;
 import org.junit.Before;
 import org.junit.Test;
 
