@@ -15,7 +15,7 @@ import net.collaud.fablab.door.file.FileHelperFactory;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 public class DoorClient extends AbstractClient{
 	private final WebTarget baseWebTarget;

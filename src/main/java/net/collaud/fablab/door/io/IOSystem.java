@@ -2,7 +2,7 @@ package net.collaud.fablab.door.io;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 abstract public class IOSystem {
 	

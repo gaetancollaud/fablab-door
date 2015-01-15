@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Schedule {

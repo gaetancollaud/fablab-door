@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class User {

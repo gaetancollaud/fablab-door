@@ -2,7 +2,7 @@ package net.collaud.fablab.door.io.ipx800;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 public interface IPXRelays {
 	

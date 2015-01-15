@@ -8,7 +8,7 @@ package net.collaud.fablab.door;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 public class Test {
 	

@@ -4,7 +4,7 @@ import net.collaud.fablab.common.file.KeyEnum;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 public enum ConfigFileHelper implements KeyEnum {
 

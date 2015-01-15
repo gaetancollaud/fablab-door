@@ -2,7 +2,7 @@ package net.collaud.fablab.door.serial;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 abstract public class SerialInterfaceFactory {
 	public static SerialInterface getBestInterface(String port){

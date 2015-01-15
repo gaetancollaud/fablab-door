@@ -9,7 +9,7 @@ import org.restexpress.Response;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 public class DoorController extends AbstractController{
 

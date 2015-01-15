@@ -4,7 +4,7 @@ import java.util.Observable;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 public class SerialInterface extends Observable{
 	

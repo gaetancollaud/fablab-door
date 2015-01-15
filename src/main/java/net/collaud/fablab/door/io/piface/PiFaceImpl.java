@@ -6,7 +6,7 @@ import net.collaud.fablab.door.io.IOSystem;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 public class PiFaceImpl extends IOSystem{
 	

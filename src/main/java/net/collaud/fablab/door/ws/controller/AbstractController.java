@@ -7,7 +7,7 @@ import org.restexpress.Request;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 public class AbstractController {
 

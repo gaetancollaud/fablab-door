@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 abstract public class PiFaceFactory {
 	private static final Logger LOG = Logger.getLogger(PiFaceFactory.class);

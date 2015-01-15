@@ -13,7 +13,7 @@ import org.restexpress.pipeline.MessageObserver;
 
 /**
  *
- * @author gaetan
+ * @author Gaetan Collaud <gaetancollaud@gmail.com>
  */
 public class WebServiceServer {
 	
